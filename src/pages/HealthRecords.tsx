@@ -66,13 +66,15 @@ const HealthRecords = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="flex-1">
+          <div className="relative flex-1">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+              <Search className="h-4 w-4 text-muted-foreground" />
+            </div>
             <Input
               placeholder="Search records..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full"
-              icon={<Search className="h-4 w-4" />}
+              className="w-full pl-9"
             />
           </div>
           <Button variant="outline">
