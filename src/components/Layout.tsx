@@ -9,6 +9,7 @@ const menuItems = [
   { icon: Home, label: "Dashboard", href: "/" },
   { icon: FileText, label: "Health Records", href: "/records" },
   { icon: Calendar, label: "Appointments", href: "/appointments" },
+  {icon: FileText, label: "Documents", href:"/documents"},
   { icon: Search, label: "Search", href: "/search" },
   { icon: History, label: "History", href: "/history", description: "View your medical history, past appointments, and previous treatments" },
   { icon: UserRound, label: "Account", href: "/settings" },

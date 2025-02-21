@@ -1,69 +1,76 @@
-# Welcome to your Lovable project
+# Health Records Management System
 
-## Project info
+A comprehensive healthcare records management system with responsive design for both desktop and mobile web interfaces.
 
-**URL**: https://lovable.dev/projects/0629fcf2-e95e-4099-8c2c-362448f46230
+## Current Features
 
-## How can I edit this code?
+### Responsive Design
+- **Mobile-First Approach**
+  - Optimized viewing on smartphones and tablets
+  - Adaptive layouts for different screen sizes
+  - Touch-friendly interface
+  - Bottom navigation for mobile users
+  - Responsive data tables and cards
 
-There are several ways of editing your application.
+### Core Functionality
+- **Health Records Management**
+  - View and manage patient records
+  - Filter and search capabilities
+  - Export records as PDF
+  - Responsive record viewing interface
 
-**Use Lovable**
+- **Appointment System**
+  - Book new appointments
+  - View upcoming/past appointments
+  - Cancel or reschedule appointments
+  - Mobile-friendly calendar interface
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0629fcf2-e95e-4099-8c2c-362448f46230) and start prompting.
+- **Document Management**
+  - Generate medical certificates
+  - Download documents as PDF
+  - Multiple document types support
+  - Mobile-optimized document viewer
 
-Changes made via Lovable will be committed automatically to this repo.
+## Tech Stack
 
-**Use your preferred IDE**
+- **Frontend**
+  - React 18 with TypeScript
+  - Vite for development
+  - TailwindCSS for responsive styling
+  - shadcn/ui components
+  - jsPDF for document generation
+  - date-fns for date handling
+  - Lucide React icons
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Upcoming Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Authentication System
+- User login/signup
+- Role-based access control
+- Password recovery
+- OAuth integration
 
-Follow these steps:
+### Backend Integration
+- Secure data storage
+- Real-time data synchronization
+- API integration
+- Database management
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Enhanced Features
+- Push notifications
+- Offline support
+- Dark mode
+- Advanced search
+- Analytics dashboard
+- Appointment reminders
+- File upload system
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Demo
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Video Demonstration
+https://user-content.githubusercontent.com/your-username/health-records-management/main/assets/demo.mp4
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/0629fcf2-e95e-4099-8c2c-362448f46230) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+<video width="100%" controls>
+  <source src="./assets/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>

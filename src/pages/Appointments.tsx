@@ -1,9 +1,16 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Clock, User } from "lucide-react";
 import Layout from "@/components/Layout";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 interface Appointment {
   id: string;
@@ -34,14 +41,33 @@ const mockAppointments: Appointment[] = [
 ];
 
 const Appointments = () => {
-  const [appointments] = useState<Appointment[]>(mockAppointments);
+  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
+  const [newAppointment, setNewAppointment] = useState({
+    date: "",
+    time: "",
+    doctor: "",
+    type: ""
+  });
+
+  const handleNewAppointment = (e: React.FormEvent) => {
+    e.preventDefault();
+    const appointment: Appointment = {
+      ...newAppointment,
+      id: (appointments.length + 1).toString(),
+      status: "upcoming"
+    };
+    setAppointments([...appointments, appointment]);
+    setNewAppointment({ date: "", time: "", doctor: "", type: "" });
+  };
 
   const handleReschedule = (id: string) => {
     console.log(`Rescheduling appointment ${id}`);
   };
 
   const handleCancel = (id: string) => {
-    console.log(`Cancelling appointment ${id}`);
+    setAppointments(appointments.map(apt => 
+      apt.id === id ? { ...apt, status: "cancelled" } : apt
+    ));
   };
 
   return (
@@ -49,9 +75,59 @@ const Appointments = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Appointments</h1>
-          <Button>
-            Book New Appointment
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Book New Appointment</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Book New Appointment</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleNewAppointment} className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="date" className="text-sm font-medium">Date</label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={newAppointment.date}
+                    onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="time" className="text-sm font-medium">Time</label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={newAppointment.time}
+                    onChange={(e) => setNewAppointment({ ...newAppointment, time: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="doctor" className="text-sm font-medium">Doctor</label>
+                  <Input
+                    id="doctor"
+                    placeholder="Doctor's Name"
+                    value={newAppointment.doctor}
+                    onChange={(e) => setNewAppointment({ ...newAppointment, doctor: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="type" className="text-sm font-medium">Appointment Type</label>
+                  <Input
+                    id="type"
+                    placeholder="Appointment Type"
+                    value={newAppointment.type}
+                    onChange={(e) => setNewAppointment({ ...newAppointment, type: e.target.value })}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full">Book Appointment</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="grid gap-6">
