@@ -43,7 +43,7 @@ const Settings = () => {
     <Layout>
       <div className="w-full max-w-4xl mx-auto space-y-8 animate-fade-in">
         <div className="space-y-4">
-          <h1 className="text-3xl font-semibold text-primary">Settings</h1>
+          <h1 className="text-3xl font-semibold text-primary">Account</h1>
           <p className="text-muted-foreground">
             Manage your account settings and preferences
           </p>

@@ -1,6 +1,6 @@
 
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
-import { Home, FileText, Calendar, Search, History, Settings, UserRound, Bell } from "lucide-react";
+import { Home, FileText, Calendar, Search, History, UserRound, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -10,8 +10,8 @@ const menuItems = [
   { icon: FileText, label: "Health Records", href: "/records" },
   { icon: Calendar, label: "Appointments", href: "/appointments" },
   { icon: Search, label: "Search", href: "/search" },
-  { icon: History, label: "History", href: "/history" },
-  { icon: Settings, label: "Settings", href: "/settings" },
+  { icon: History, label: "History", href: "/history", description: "View your medical history, past appointments, and previous treatments" },
+  { icon: UserRound, label: "Account", href: "/settings" },
 ];
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -31,7 +31,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   key={item.label}
                   to={item.href}
                   className={cn(
-                    "flex items-center px-6 py-3 text-sm transition-colors",
+                    "flex items-center px-6 py-3 text-sm transition-colors group relative",
                     "hover:bg-accent hover:text-primary",
                     "rounded-lg mx-2",
                     location.pathname === item.href
@@ -41,6 +41,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 >
                   <item.icon className="h-5 w-5 mr-3" />
                   {item.label}
+                  {item.description && (
+                    <div className="absolute left-full ml-2 w-48 p-2 bg-popover rounded-md shadow-md invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity text-xs text-muted-foreground">
+                      {item.description}
+                    </div>
+                  )}
                 </Link>
               ))}
             </nav>
