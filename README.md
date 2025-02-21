@@ -70,10 +70,5 @@ A **modern, secure, and user-friendly healthcare records management system** bui
 ---
 
 ## 🎬 Demo Video  
-
-📹 **Watch the demo:**  
-[![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/7bdf2e70-94a9-4a37-8d49-71b865f3a00b
-)  
-
----
+[![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/7bdf2e70-94a9-4a37-8d49-71b865f3a00b)
 
