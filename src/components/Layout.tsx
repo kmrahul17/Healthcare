@@ -1,7 +1,9 @@
 
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
-import { Home, FileText, Calendar, Search, History, Settings, UserRound } from "lucide-react";
+import { Home, FileText, Calendar, Search, History, Settings, UserRound, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/" },
@@ -13,6 +15,8 @@ const menuItems = [
 ];
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
@@ -23,21 +27,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <SidebarContent>
             <nav className="space-y-1">
               {menuItems.map((item) => (
-                <a
+                <Link
                   key={item.label}
-                  href={item.href}
+                  to={item.href}
                   className={cn(
                     "flex items-center px-6 py-3 text-sm transition-colors",
                     "hover:bg-accent hover:text-primary",
                     "rounded-lg mx-2",
-                    window.location.pathname === item.href
+                    location.pathname === item.href
                       ? "bg-accent text-primary font-medium"
                       : "text-foreground/60"
                   )}
                 >
                   <item.icon className="h-5 w-5 mr-3" />
                   {item.label}
-                </a>
+                </Link>
               ))}
             </nav>
           </SidebarContent>
@@ -47,9 +51,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <header className="h-16 border-b border-border bg-background flex items-center justify-between px-8">
             <SidebarTrigger />
             <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-accent rounded-full transition-colors">
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5 text-foreground/60" />
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary" />
+              </Button>
+              <Button variant="ghost" size="icon">
                 <UserRound className="h-5 w-5 text-foreground/60" />
-              </button>
+              </Button>
             </div>
           </header>
           <main className="flex-1 overflow-auto p-8 bg-background">
