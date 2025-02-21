@@ -70,9 +70,11 @@ A **comprehensive healthcare records management system** designed with a **mobil
 
 ## 🎬 Demo Video  
 <video controls width="100%">
-    <source src="public/assets/Recording 2025-02-21 164733.mp4" type="video/mp4">
+    <source src="[https://github.com/YOUR-USERNAME/YOUR-REPO/releases/download/v1.0/demo.mp4" type="video/mp4](https://github.com/user-attachments/assets/7bdf2e70-94a9-4a37-8d49-71b865f3a00b
+)">
     Your browser does not support the video tag.
 </video>
+
 
 
 ---
