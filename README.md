@@ -68,8 +68,10 @@ A **comprehensive healthcare records management system** designed with a **mobil
 
 ---
 
-## 🎬 **Demo Video**
-📹 Click below to watch the **live demo** of the project:  
-[![Watch the Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](public/assets/demo.mp4)
+## 🎬 Demo Video
+<video width="100%" controls>
+  <source src="public/assets/Recording 2025-02-21 164733.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ---
