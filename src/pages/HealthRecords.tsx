@@ -7,7 +7,9 @@ import { Download, FileText, Calendar, Search, Settings, History, Filter, ArrowU
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import Layout from "@/components/Layout";
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { RecordForm } from "@/components/health-records/RecordForm";
 interface MedicalRecord {
   id: string;
   date: string;

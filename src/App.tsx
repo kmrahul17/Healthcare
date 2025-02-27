@@ -12,7 +12,8 @@ import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
 import Documents from "./pages/Documents";
-
+import SymptomChecker from "./pages/SymptomChecker";
+import { Activity } from "lucide-react";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -26,7 +27,7 @@ const App = () => (
           <Route path="/records" element={<HealthRecords />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/documents" element={<Documents />} />
-
+<Route path="/symptom-checker" element={<SymptomChecker />} /> 
           <Route path="/search" element={<Search />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/history" element={<History />} />
