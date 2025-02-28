@@ -52,7 +52,13 @@ A modern solution for digitizing and managing medical records with intelligent d
   - Intuitive navigation
   - Document preview
   - Real-time notifications
-
+### 6. AI-Powered Symptom Analysis
+- **Technologies Used**: TensorFlow.js, Compromise NLP
+- **Features**:
+  - Natural language symptom description processing
+  - ML-based severity prediction
+  - Automated health recommendations
+  - Real-time urgency assessment
 ## 💻 Technical Stack
 
 ### Frontend
@@ -66,6 +72,11 @@ A modern solution for digitizing and managing medical records with intelligent d
 - jsPDF for document generation
 - Custom regex patterns
 
+### NLP Processing:
+- Text preprocessing using Compromise
+- Symptom pattern recognition
+- Medical terminology extraction
+- Contextual analysis
 ### Development
 - VS Code
 - npm
@@ -78,12 +89,18 @@ A modern solution for digitizing and managing medical records with intelligent d
 - Quick record access
 - Organized documentation
 - Professional exports
+- AI-assisted preliminary diagnosis
+- Automated symptom severity assessment
+- Quick patient triage support
 
 ### For Patients
 - Easy health record access
 - Organized medical history
 - Secure document storage
 - Professional documentation
+- Instant symptom analysis
+- Smart health recommendations
+- Urgency level assessment
 
 ## 🚀 Future Enhancements
 
@@ -99,12 +116,6 @@ A modern solution for digitizing and managing medical records with intelligent d
 - Health trend analysis
 - Enhanced OCR capabilities
 
-## 📊 Impact & Outcomes
-1. Improved efficiency in record management
-2. Reduced data entry errors
-3. Better accessibility to medical history
-4. Enhanced data security
-5. Simplified document organization
 
 ## 🎬 Demo Video  
 [![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/a4ed0db0-627b-4667-9dcd-3dd1d76d8065)
