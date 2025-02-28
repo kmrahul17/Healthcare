@@ -107,8 +107,11 @@ A modern solution for digitizing and managing medical records with intelligent d
 5. Simplified document organization
 
 ## 🎬 Demo Video  
-[![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/7bdf2e70-94a9-4a37-8d49-71b865f3a00b)
+[![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/a4ed0db0-627b-4667-9dcd-3dd1d76d8065)
 
+## 🌐 Live Demo
 
+### Deployed Website
+Visit our live application: [Secure Health Records](https://healthcare-alpha-blush.vercel.app/records)
 
 Built with ❤️ for better healthcare management
