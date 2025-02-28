@@ -123,6 +123,6 @@ A modern solution for digitizing and managing medical records with intelligent d
 ## 🌐 Live Demo
 
 ### Deployed Website
-Visit our live application: [Secure Health Records](https://healthcare-alpha-blush.vercel.app/records)
+Visit our live application: [Secure Health Records](https://healthcare-alpha-blush.vercel.app/)
 
 Built with ❤️ for better healthcare management
