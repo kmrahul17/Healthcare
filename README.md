@@ -1,74 +1,61 @@
-# 🏥 Health Records Management System  
+# 🏥 Secure Health Records Management System
 
-A **modern, secure, and user-friendly healthcare records management system** built with a **mobile-first approach** and **responsive UI**, enabling efficient **patient record management, appointment scheduling, and document generation**.  
+A modern, secure, and user-friendly healthcare records management system that simplifies medical document handling, featuring OCR-powered document scanning, intelligent data extraction, and comprehensive record management.
 
----
+## ✨ Current Features
 
-## 🚀 Key Features  
+### 📑 Document Management
+- **Smart OCR Processing**: Convert physical documents to digital format
+- **Automated Information Extraction**: 
+  - Patient vitals
+  - Doctor details
+  - Diagnoses
+  - Medications
+  - Treatment plans
+  - Follow-up dates
 
-### 📱 Responsive Design  
-✅ **Mobile-First Interface** – Optimized for **smartphones, tablets, and desktops**  
-✅ **Adaptive Layouts** – Ensures a seamless experience on all screen sizes  
-✅ **Touch-Friendly Navigation** – Bottom navigation for mobile users  
-✅ **Responsive Data Tables & Cards** – Ensuring data is easy to read and access  
+### 📊 Record Organization
+- **Advanced Search & Filtering**: 
+  - Date-based filtering
+  - Doctor name search
+  - Category filtering
+- **Document Categories**: Auto-categorization of medical records
+- **Bulk Operations**: Select and export multiple records
 
-### 🏥 Health Records Management  
-✅ **View & Manage Patient Records** – Organized, secure, and searchable  
-✅ **Advanced Search & Filtering** – Quickly find relevant records  
-✅ **Export Records as PDF** – Easily share or store medical data  
-✅ **Secure Data Handling** – Ensuring patient privacy and compliance  
+### 📄 Export Options
+- **PDF Generation**: Create professional medical record PDFs
+- **Structured Format**: Well-organized document layout
+- **Complete Information**: Includes all extracted medical data
 
-### 📅 Appointment System  
-✅ **Book, Cancel, or Reschedule** appointments effortlessly  
-✅ **View Upcoming & Past Appointments** for better tracking  
-✅ **Calendar-Based UI** – Intuitive and mobile-optimized  
+## 🚀 Technology Stack
 
-### 📄 Document Management  
-✅ **Generate Medical Certificates** dynamically  
-✅ **Download Documents as PDF** for easy sharing  
-✅ **Support for Multiple Document Types**  
-✅ **Mobile-Optimized Document Viewer** for enhanced accessibility  
+### Frontend
+- ⚛️ React with TypeScript
+- 🎨 TailwindCSS
+- 🛠️ shadcn/ui
+- 📄 jsPDF
+- 🖼️ Tesseract.js
 
----
+## 🔮 Upcoming Features
 
-## 🛠 Tech Stack  
+### 👤 Authentication & Authorization
+- **User Authentication**: Secure login/signup system
+- **Role-based Access**: Different permissions for different user types
+- **Password Recovery**: Secure password reset flow
 
-### 🎨 Frontend  
-🚀 **React 18** with TypeScript – High-performance and maintainable code  
-⚡ **Vite** – Superfast development environment  
-🎨 **TailwindCSS** – Modern, responsive styling  
-🛠 **shadcn/ui** – Prebuilt UI components for a polished interface  
-📜 **jsPDF** – Seamless PDF generation  
-📆 **date-fns** – Efficient date handling and formatting  
-🎨 **Lucide React** – Clean, lightweight icons  
-
----
-
-## 🔥 Upcoming Features  
-
-### 🔒 Authentication System  
-- Secure **User Login/Signup**  
-- **Role-Based Access Control** for different user types  
-- **Password Recovery** and Multi-Factor Authentication  
-- **OAuth Integration** (Google, GitHub, etc.)  
-
-### 📡 Backend Integration  
-- Secure **Data Storage** with encryption  
-- **Real-Time Data Synchronization**  
-- Robust **API Integration**  
-- Scalable **Database Management**  
-
-### 📌 Enhanced Features  
-✅ **Push Notifications** – Get real-time updates  
-✅ **Offline Support** – Work without an internet connection  
-✅ **Dark Mode** – User preference-based theme selection  
-✅ **Advanced Search** – Intelligent filtering for quick access  
-✅ **Analytics Dashboard** – Insights on appointments and records  
-✅ **Appointment Reminders** – Never miss a consultation  
-✅ **File Upload System** – Store and access medical reports securely  
-
----
+### 🤖 AI Integration
+- **Smart Analysis**: 
+  - Automated diagnosis suggestions
+  - Health pattern recognition
+  - Medical terminology extraction
+- **Document Enhancement**:
+  - Improved OCR accuracy
+  - Better data extraction
+  - Automated categorization
 
 ## 🎬 Demo Video  
 [![Watch the video](https://via.placeholder.com/800x400?text=Click+to+Watch)](https://github.com/user-attachments/assets/7bdf2e70-94a9-4a37-8d49-71b865f3a00b)
 
+
+
+Built with ❤️ for better healthcare management

@@ -3,13 +3,62 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, FileText, Calendar, Search, Settings, History, Filter, ArrowUpDown, Star, Bookmark, FolderOpen, CheckSquare } from "lucide-react";
+import { Download, FileText, Calendar, Search, Settings, History, Filter, ArrowUpDown, Star, Bookmark, FolderOpen, CheckSquare,Eye } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import Layout from "@/components/Layout";
+
+import { DocumentScanner } from "@/components/health-records/DocumentScanner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { RecordForm } from "@/components/health-records/RecordForm";
+const extractKeyInformation = (text: string) => {
+  const summary = {
+    doctorName: extractDoctorName(text),
+    date: extractDate(text),
+    diagnosis: extractDiagnosis(text),
+    medications: extractMedications(text),
+    keyFindings: extractKeyFindings(text),
+  };
+  return summary;
+};
+
+const extractDoctorName = (text: string): string => {
+  const doctorMatch = text.match(/(?:Dr\.|Doctor)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?/);
+  return doctorMatch ? doctorMatch[0] : "Unknown";
+};
+
+const extractDate = (text: string): string => {
+  const dateMatch = text.match(/\d{2}[-/]\d{2}[-/]\d{4}/);
+  return dateMatch ? dateMatch[0] : new Date().toISOString().split('T')[0];
+};
+
+const extractDiagnosis = (text: string): string => {
+  const diagnosisMatch = text.match(/(?:diagnosis|assessment|impression):.*?[.;\n]/i);
+  return diagnosisMatch ? diagnosisMatch[0].replace(/(?:diagnosis|assessment|impression):/i, '').trim() : "";
+};
+
+const extractMedications = (text: string): string[] => {
+  const medRegex = /(?:prescribed|medication|rx|drug):?(.*?)(?:\n|$)/gi;
+  const medications: string[] = [];
+  let match;
+  while ((match = medRegex.exec(text)) !== null) {
+    medications.push(match[1].trim());
+  }
+  return medications;
+};
+
+const extractKeyFindings = (text: string): string[] => {
+  const findings = text
+    .split(/[.;\n]/)
+    .map(line => line.trim())
+    .filter(line => 
+      line.length > 10 && 
+      (line.includes(':') || line.match(/^[A-Z]/))
+    )
+    .slice(0, 3);
+  return findings;
+};
 interface MedicalRecord {
   id: string;
   date: string;
@@ -19,6 +68,12 @@ interface MedicalRecord {
   documents: string[];
   category?: string;
   selected?: boolean;
+  metadata?: {
+    diagnosis?: string;
+    medications?: string[];
+    keyFindings?: string[];
+    fullText: string;
+  };
 }
 
 interface SearchHistory {
@@ -65,11 +120,15 @@ const mockRecords: MedicalRecord[] = [
 
 const HealthRecords = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { toast } = useToast();
+  
   const [records, setRecords] = useState<MedicalRecord[]>(mockRecords);
   const [filteredRecords, setFilteredRecords] = useState<MedicalRecord[]>(records);
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [filters, setFilters] = useState(defaultFilters);
   const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
+  const [extractedText, setExtractedText] = useState<string | null>(null);
+
   const [savedPresets, setSavedPresets] = useState<FilterPreset[]>([
     {
       id: "1",
@@ -125,8 +184,88 @@ const HealthRecords = () => {
     setFilteredRecords(filtered);
   };
 
-  const handleDownload = (documentName: string) => {
-    console.log(`Downloading ${documentName}`);
+  const handleDownload = async (record: MedicalRecord) => {
+    try {
+      const { jsPDF } = await import('jspdf');
+      const pdf = new jsPDF();
+  
+      // Add header
+      pdf.setFontSize(20);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Medical Record", 20, 20);
+  
+      // Add metadata
+      pdf.setFontSize(12);
+      pdf.setFont("helvetica", "normal");
+      
+      let yPos = 40;
+      const addLine = (text: string) => {
+        pdf.text(text, 20, yPos);
+        yPos += 10;
+      };
+  
+      addLine(`Date: ${record.date}`);
+      addLine(`Doctor: ${record.doctor}`);
+      addLine(`Type: ${record.type}`);
+      addLine(`Category: ${record.category || 'N/A'}`);
+  
+      // Add description
+      yPos += 5;
+      addLine("Description:");
+      addLine(record.description);
+  
+      // For scanned documents, add additional metadata
+      if (record.type === "Scanned Document" && record.metadata) {
+        if (record.metadata.diagnosis) {
+          yPos += 5;
+          addLine("Diagnosis:");
+          addLine(record.metadata.diagnosis);
+        }
+  
+        if (record.metadata.medications?.length) {
+          yPos += 5;
+          addLine("Medications:");
+          record.metadata.medications.forEach(med => {
+            addLine(`• ${med}`);
+          });
+        }
+  
+        if (record.metadata.keyFindings?.length) {
+          yPos += 5;
+          addLine("Key Findings:");
+          record.metadata.keyFindings.forEach(finding => {
+            addLine(`• ${finding}`);
+          });
+        }
+  
+        // Add the scanned image if available
+        if (record.documents[0]?.startsWith('data:image')) {
+          pdf.addImage(
+            record.documents[0],
+            'JPEG',
+            20,
+            yPos + 10,
+            170,
+            100
+          );
+        }
+      }
+  
+      // Save the PDF
+      pdf.save(`medical-record-${record.id}.pdf`);
+  
+      toast({
+        title: "Success",
+        description: "Document downloaded successfully",
+      });
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to download document",
+        variant: "destructive",
+      });
+    }
   };
 
   const applySearchFromHistory = (historicalTerm: string) => {
@@ -173,27 +312,145 @@ const HealthRecords = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
+  
   const categories = Array.from(new Set(records.map(record => record.category)));
+  const handleScanComplete = (text: string, image: string) => {
+    try {
+      setExtractedText(text);
+      
+      const summary = extractKeyInformation(text);
+      
+      const newRecord: MedicalRecord = {
+        id: Date.now().toString(),
+        date: summary.date,
+        type: "Scanned Document",
+        doctor: summary.doctorName,
+        description: summary.keyFindings.join('. ') || text.substring(0, 200) + "...",
+        documents: [image],
+        category: "Scanned Documents",
+        metadata: {
+          diagnosis: summary.diagnosis,
+          medications: summary.medications,
+          keyFindings: summary.keyFindings,
+          fullText: text
+        }
+      };
+    
+      setRecords(prev => [...prev, newRecord]);
+      
+      toast({
+        title: "Success",
+        description: "Document scanned and saved successfully",
+      });
+    } catch (error) {
+      console.error('Scan error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to process document",
+        variant: "destructive",
+      });
+    }
+  };
+  const DocumentSummary = ({ text }: { text: string }) => {
+    const summary = extractKeyInformation(text);
+    
+    return (
+      <div className="space-y-4">
+        <div className="grid gap-3">
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Doctor</h4>
+            <p className="font-medium">{summary.doctorName}</p>
+          </div>
+          
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Date</h4>
+            <p className="font-medium">{summary.date}</p>
+          </div>
+  
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Patient Details</h4>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {/* Add regex patterns to extract these values */}
+              {text.match(/Height.*?(\d+)/i) && <span>Height: {text.match(/Height.*?(\d+)/i)![1]} cm</span>}
+              {text.match(/Weight.*?(\d+)/i) && <span>Weight: {text.match(/Weight.*?(\d+)/i)![1]} Kg</span>}
+              
+              {text.match(/BMI.*?([\d.]+)/i) && <span>BMI: {text.match(/BMI.*?([\d.]+)/i)![1]}</span>}
+              {text.match(/BP:?\s*(\d+\/\d+)/i) && <span>BP: {text.match(/BP:?\s*(\d+\/\d+)/i)![1]} mmHg</span>}
+            </div>
+          </div>
+  
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Chief Complaints</h4>
+            <ul className="list-disc list-inside text-sm">
+              {text.match(/complaints?(.*?)(?:diagnosis|medications|\n\n)/is)?.[1]
+                .split('\n')
+                .filter(line => line.trim().startsWith('*') || line.trim().startsWith('-'))
+                .map((complaint, index) => (
+                  <li key={index}>{complaint.replace(/^[*-]\s*/, '').trim()}</li>
+                ))}
+            </ul>
+          </div>
+  
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Diagnosis</h4>
+            <p className="font-medium">{summary.diagnosis}</p>
+          </div>
+  
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Medications</h4>
+            <ul className="list-disc list-inside text-sm">
+              {summary.medications.map((med, index) => (
+                <li key={index}>{med}</li>
+              ))}
+            </ul>
+          </div>
+  
+          <div>
+            <h4 className="font-medium text-sm text-muted-foreground">Advice</h4>
+            <ul className="list-disc list-inside text-sm">
+              {text.match(/advice:?(.*?)(?:follow|$)/is)?.[1]
+                .split('\n')
+                .filter(line => line.trim().startsWith('*') || line.trim().startsWith('-'))
+                .map((advice, index) => (
+                  <li key={index}>{advice.replace(/^[*-]\s*/, '').trim()}</li>
+                ))}
+            </ul>
+          </div>
+  
+          {text.match(/follow.*?(\d{2}[-/]\d{2}[-/]\d{4})/i) && (
+            <div>
+              <h4 className="font-medium text-sm text-muted-foreground">Follow Up</h4>
+              <p className="font-medium">
+                {text.match(/follow.*?(\d{2}[-/]\d{2}[-/]\d{4})/i)![1]}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
+    
     <Layout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Health Records</h1>
-          <div className="flex space-x-2">
-            {selectedRecords.length > 0 && (
-              <Button onClick={exportSelectedRecords}>
-                <Download className="mr-2 h-4 w-4" />
-                Export Selected ({selectedRecords.length})
-              </Button>
-            )}
-            <Button>
-              <FileText className="mr-2 h-4 w-4" />
-              Generate Report
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Health Records</h1>
+        <div className="flex space-x-2">
+          {selectedRecords.length > 0 && (
+            <Button onClick={exportSelectedRecords}>
+              <Download className="mr-2 h-4 w-4" />
+              Export Selected ({selectedRecords.length})
             </Button>
-          </div>
+          )}
+          <DocumentScanner onScanComplete={handleScanComplete} />
+          <Button>
+            <FileText className="mr-2 h-4 w-4" />
+            Generate Report
+          </Button>
         </div>
+      </div>
 
         <div className="flex items-center space-x-4">
           <div className="relative flex-1">
@@ -348,56 +605,78 @@ const HealthRecords = () => {
               </div>
             </SheetContent>
           </Sheet>
-        </div>
+          </div>
+          {extractedText && (
+  <div className="space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>Document Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DocumentSummary text={extractedText} />
+      </CardContent>
+    </Card>
+  </div>
+)}
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {filteredRecords.map((record) => (
-            <Card 
-              key={record.id} 
-              className={`animate-fade-in ${selectedRecords.includes(record.id) ? 'border-primary' : ''}`}
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedRecords.includes(record.id)}
-                      onChange={() => toggleRecordSelection(record.id)}
-                      className="rounded border-gray-300"
-                    />
-                    <span>{record.type}</span>
+<div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {filteredRecords.map((record) => (
+          <Card 
+            key={record.id} 
+            className={`animate-fade-in ${selectedRecords.includes(record.id) ? 'border-primary' : ''}`}
+          >
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedRecords.includes(record.id)}
+                    onChange={() => toggleRecordSelection(record.id)}
+                    className="rounded border-gray-300"
+                  />
+                  <span>{record.type}</span>
+                </div>
+                <span className="text-sm text-muted-foreground">{record.date}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">{record.category}</span>
                   </div>
-                  <span className="text-sm text-muted-foreground">{record.date}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <FolderOpen className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{record.category}</span>
-                    </div>
-                    <p className="font-medium">{record.doctor}</p>
-                    <p className="text-muted-foreground">{record.description}</p>
-                  </div>
-                  <div className="flex items-center justify-between">
+                  <p className="font-medium">{record.doctor}</p>
+                  <p className="text-muted-foreground">{record.description}</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                <Button
+  variant="outline"
+  size="sm"
+  onClick={() => handleDownload(record)}
+>
+  <Download className="mr-2 h-4 w-4" />
+  Download Report
+</Button>
+                  {record.type === "Scanned Document" && record.metadata && (
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleDownload(record.documents[0])}
+                      onClick={() => setExtractedText(record.metadata.fullText)}
                     >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Report
+                      <Eye className="mr-2 h-4 w-4" />
+                      View Details
                     </Button>
-                  </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-    </Layout>
-  );
+    </div>
+  </Layout>
+);
 };
 
 export default HealthRecords;
